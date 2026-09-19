@@ -22,7 +22,15 @@ typedef uint32_t b_t;
 #define K_A 3
 #define K_D 4
 
-b_t b[4][4];
+b_t b[4][4] /* =
+{
+    {
+        0
+    },
+    {0,0,0,4},
+    {0,0,0,2},
+    {0,0,0,2}
+} */; // 上一版本出错数据
 int is_new[4][4];
 
 #define sgetchar() ({int c; if ((c = getchar()) == EOF) exit(0); c;})
@@ -97,13 +105,13 @@ void dump()
         putchar('\n');
     }
 }
-
+#define can_merge(i1,j1,i2,j2) (!is_new[i1][j1] && !is_new[i2][j2] && b[i1][j1] == b[i2][j2])
 int is_move_up()
 {
     debug_puts(__func__);
     for (size_t i = 1; i < 4; i++)
         for (size_t j = 0; j < 4; j++)
-            if (b[i][j] && (b[i - 1][j] == 0 || !is_new[i][j] && b[i - 1][j] == b[i][j]))
+            if (b[i][j] && (b[i - 1][j] == 0 || can_merge(i,j,i-1,j)))
                 return 1;
     return 0;
 }
@@ -112,7 +120,7 @@ int is_move_down()
     debug_puts(__func__);
     for (int i = 2; i > -1; i--)
         for (size_t j = 0; j < 4; j++)
-            if (b[i][j] && (b[i + 1][j] == 0 || !is_new[i][j] && b[i + 1][j] == b[i][j]))
+            if (b[i][j] && (b[i + 1][j] == 0 || can_merge(i,j,i+1,j)))
                 return 1;
     return 0;
 }
@@ -121,7 +129,7 @@ int is_move_left()
     debug_puts(__func__);
     for (size_t j = 1; j < 4; j++)
         for (size_t i = 0; i < 4; i++)
-            if (b[i][j] && (b[i][j - 1] == 0 || !is_new[i][j] && b[i][j - 1] == b[i][j]))
+            if (b[i][j] && (b[i][j - 1] == 0 || can_merge(i,j,i,j-1)))
                 return 1;
     return 0;
 }
@@ -130,7 +138,7 @@ int is_move_right()
     debug_puts(__func__);
     for (int j = 2; j > -1; j--)
         for (size_t i = 0; i < 4; i++)
-            if (b[i][j] && (b[i][j + 1] == 0 || !is_new[i][j] && b[i][j + 1] == b[i][j]))
+            if (b[i][j] && (b[i][j + 1] == 0 || can_merge(i,j,i,j+1)))
                 return 1;
     return 0;
         
@@ -152,7 +160,7 @@ void move_up()
                 is_new[i - 1][j] = is_new[i][j];
                 is_new[i][j] = 0;
             }
-            else if (!is_new[i][j] && b[i - 1][j] == b[i][j])
+            else if (can_merge(i,j,i-1,j))
             {
                 b[i - 1][j] *= 2;
                 b[i][j] = 0;
@@ -179,7 +187,7 @@ void move_down()
                 is_new[i + 1][j] = is_new[i][j];
                 is_new[i][j] = 0;
             }
-            else if (!is_new[i][j] && b[i + 1][j] == b[i][j])
+            else if (can_merge(i,j,i+1,j))
             {
                 b[i + 1][j] *= 2;
                 b[i][j] = 0;
@@ -206,7 +214,7 @@ void move_left()
                 is_new[i][j - 1] = is_new[i][j];
                 is_new[i][j] = 0;
             }
-            else if (!is_new[i][j] && b[i][j - 1] == b[i][j])
+            else if (can_merge(i,j,i,j-1))
             {
                 b[i][j - 1] *= 2;
                 b[i][j] = 0;
@@ -235,7 +243,7 @@ void move_right()
                 is_new[i][j + 1] = is_new[i][j];
                 is_new[i][j] = 0;
             }
-            else if (!is_new[i][j] && b[i][j + 1] == b[i][j])
+            else if (can_merge(i,j,i,j+1))
             {
                 b[i][j + 1] *= 2;
                 b[i][j] = 0;
@@ -326,7 +334,7 @@ int main(int argc, char ** argv)
         c = sgetchar();
         if (c == 0x1B)
         {
-            c = sgetchar();
+            c = sgetchar(); // 若用户按下Esc，这里会导致下一次的方向键无效
             if (c == 0x5B)
             {
                 switch ((c = sgetchar()))
