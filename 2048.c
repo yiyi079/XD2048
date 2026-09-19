@@ -316,11 +316,7 @@ int main(int argc, char ** argv)
     pthread_create(&tid, NULL, sig_thr, NULL);
     set_noncanonical();
     puts("Hello 2048!\nuse WASD or ↑↓←→ to control\n===================================\n\n\n\n");
-    dump();
-    getchar();
     *get_empty() = gen_block_num();
-    dump();
-    getchar();
     *get_empty() = gen_block_num();
     dump();
     
