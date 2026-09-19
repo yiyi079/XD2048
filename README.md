@@ -1,5 +1,8 @@
 # A simple 2048 game in terminal
-Reference:
+
+一个晚上速写的，可能有bug（ is_new\[4\]\[4\] 就是写完发现和2048规则不同加的，不想重构了... ） （ 话说我今天才知道要写2048啊... ）
+
+### Reference:
 
 _[《UNIX环境高级编程（第三版）》 ( APUE )](https://raw.githubusercontent.com/yiyi079/XD2048/master/UNIX环境高级编程（中文第三版）.pdf)_ ( signal, thread, terminal )
 
