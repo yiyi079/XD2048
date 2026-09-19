@@ -13,3 +13,5 @@ Known bug(s):
 2.[SHELL：echo -e "\033\[字背景颜色;字体颜色m字符串\033\[0m"](https://blog.csdn.net/roler_/article/details/17506181) ( terminal )
 
 3.[Markdown 教程 | 菜鸟教程](https://www.runoob.com/markdown/md-tutorial.html) ( Markdown )
+
+Developing/testing platform: macOS 26.4 arm64
