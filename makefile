@@ -1,2 +1,2 @@
 all:
-	clang 2048.c -o 2048
+	clang 2048.c -lpthread -o 2048
